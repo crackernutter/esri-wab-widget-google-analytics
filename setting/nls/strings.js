@@ -1,7 +1,12 @@
 define({
   root: {
-      logMapEvents: "Log Map Events (Pan, Zoom Etc) to Google Analytics",
-      logLayerEvents: "Log Layer Events (load, add, remove) to Google Analytics"      
+      trackedEvents: "Tracked Map Events",
+      trackedLayers: "Tracked Layers",
+      logClk: "Log Map Clicks",
+      logDblClk: "Log Map Double Clicks",
+      logExtChg: "Log Map Extent Changes",
+      logPan: "Log Map Pans",
+      logZoom: "Log Map Zoom",  
   },
   "ar": false,
   "cs": false,

@@ -37,8 +37,12 @@ define([
 
 
         // set whether to log map/layer events
-        this.logMapEvents = this.config.logMapEvents;
-        this.logLayerEvents = this.config.logLayerEvents;
+        this.logClk = this.config.logClk;
+        this.logDblClk = this.config.logDblClk;
+        this.logExtChg = this.config.logExtChg;
+        this.logPan = this.config.logPan;
+        this.logZoom = this.config.logZoom;
+        this.logLayers = this.config.logLayers;
 
       // summary:
       //      Overrides method of same name in dijit._Widget.
@@ -60,62 +64,48 @@ define([
           //console.log('GoogleAnalytics::startup', arguments);
         
           // user selected option to log map events
-          if (this.logMapEvents){
-              
+          if (this.logClk){
               // On click
               on(this.map, "click", lang.hitch(this, function (event) {
                   ga('send', 'event', 'Map Interaction', 'click', 'x:'+ event.x + " y:" + event.y);
-        
               }));
-        
+          }
               // On Double click
+            if (this.logDblClk){
               on(this.map, "dbl-click", lang.hitch(this, function (event) {
                   ga('send', 'event', 'Map Interaction', 'dbl-click', 'x:' + event.x + " y:" + event.y);
         
               }));
-        
+            }
               // On Extent Change
-              on(this.map, "extent-change", lang.hitch(this, function (event) {
-                  ga('send', 'event', 'Map Interaction', 'extent-change', 'delta [x,y]:[' + event.delta.x + "," + event.delta.y + "], extent[xmax,xmin,ymax,ymin]: [" + event.extent.xmax + "," + event.extent.xmin + "," + event.extent.ymax + "," + event.extent.ymin + "] levelChange:" + event.levelChange + " lod[level,scale]: [" +  event.lod.level + "," + event.lod.scale + "]");
-        
-              }));
+              if (this.logExtChg){
+                on(this.map, "extent-change", lang.hitch(this, function (event) {
+                    ga('send', 'event', 'Map Interaction', 'extent-change', 'delta [x,y]:[' + event.delta.x + "," + event.delta.y + "], extent[xmax,xmin,ymax,ymin]: [" + event.extent.xmax + "," + event.extent.xmin + "," + event.extent.ymax + "," + event.extent.ymin + "] levelChange:" + event.levelChange + " lod[level,scale]: [" +  event.lod.level + "," + event.lod.scale + "]");
+                }));
+              }
               
-                          // On pan
-              on(this.map, "pan", lang.hitch(this, function (event) {
+                // On pan
+            if (this.logPan){
+              on(this.map, "pan-end", lang.hitch(this, function (event) {
                   ga('send', 'event', 'Map Interaction', 'pan', 'delta [x,y]:[' + event.delta.x + "," + event.delta.y + "], extent[xmax,xmin,ymax,ymin]: [" + event.extent.xmax + "," + event.extent.xmin + "," + event.extent.ymax + "," + event.extent.ymin + "]");
-        
               }));
+            }
         
                 // On Zoom
-              on(this.map, "zoom", lang.hitch(this, function (event) {
+            if (this.logZoom){
+              on(this.map, "zoom-end", lang.hitch(this, function (event) {
                   ga('send', 'event', 'Map Interaction', 'zoom', 'anchor [x,y]:[' + event.x + "," + event.y + "], extent[xmax,xmin,ymax,ymin]: [" + event.extent.xmax + "," + event.extent.xmin + "," + event.extent.ymax + "," + event.extent.ymin + "]" + " zoomFactor: " +event.zoomFactor);
-        
               }));
          }
      
          // user selected option to log layer events
-         if (this.logLayerEvents){
-              
-              //Log Layers in the map
-              array.forEach(this.map.layerIds, lang.hitch(this, function (id) {
-                  var layer = this.map.getLayer(id);
-                  ga('send', 'event', 'Layers', layer.id, layer.url);
-              }));
+         array.forEach(this.logLayers, lang.hitch(this, function(id){
+                var layer = this.map.getLayer(id);
+                on(layer, 'visibility-change', lang.hitch(this, function(event){
+					  ga('send', 'event', 'layer-visibility', layer.id, event.visible);
+				  }));
+         }));
         
-              // Track New Layers 
-              on(this.map, "layer-add", lang.hitch(this, function (event) {
-                  var layer = event.layer
-                  ga('send', 'event', 'Layers', 'layer-add', 'id:' + layer.id + " url:" + layer.url);
-        
-              }));
-        
-              // Track Removed Layers 
-              on(this.map, "layer-remove", lang.hitch(this, function (event) {
-                  var layer = event.layer
-                  ga('send', 'event', 'Layers', 'layer-remove', 'id:' + layer.id + " url:" + layer.url);
-        
-              }));
-         }
          
          // hide the icon in the menu bar  
         this._hideMenuIcon(this.id, this.label);

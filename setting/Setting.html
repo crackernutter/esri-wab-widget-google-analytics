@@ -3,16 +3,23 @@
         <h3> Add your Google Analytics Code in the textbox below</h3>
     </div>
     <div>
-    	<textarea id="codeInput" data-dojo-type="dijit/form/Textarea" data-dojo-attach-point="codeInput" rows="2" cols="20"></textarea>
+    	<textarea id="codeInput" data-dojo-type="dijit/form/Textarea" data-dojo-attach-point="codeInput"></textarea>
     </div>
     <div class="title">
     	<p><strong> Warning:</strong>  Keep this widget set to automatically open when app starts (the green dot displayed on the icon)</p>
     	<p><strong> Note:</strong>  The Widget icon will been hidden from view on load....</p>
     </div>
-    <div>
-		<li>
-			<ul><div data-dojo-type="jimu/dijit/CheckBox" data-dojo-attach-point="logMapEvents" data-dojo-props="label:'${nls.logMapEvents}'"></div></ul>
-			<ul><div data-dojo-type="jimu/dijit/CheckBox" data-dojo-attach-point="logLayerEvents" data-dojo-props="label:'${nls.logLayerEvents}'"></div></ul>
-		</li>
+    <div id="map-events">
+        <div><strong>${nls.trackedEvents}</strong></div>
+            <div><div id="clkChk" data-dojo-type="jimu/dijit/CheckBox" data-dojo-attach-point="logClk"></div> <label for="clkChk">${nls.logClk}</label></div>
+            <div><div id="dblClkChk" data-dojo-type="jimu/dijit/CheckBox" data-dojo-attach-point="logDblClk"></div> <label for="dblClkChk">${nls.logDblClk}</label></div>
+            <div><div id="extChgChk" data-dojo-type="jimu/dijit/CheckBox" data-dojo-attach-point="logExtChg"></div> <label for="extChgChk">${nls.logExtChg}</label></div>
+            <div><div id="panChk" data-dojo-type="jimu/dijit/CheckBox" data-dojo-attach-point="logPan"></div> <label for="panChk">${nls.logPan}</label></div>
+            <div><div id="zoomChk" data-dojo-type="jimu/dijit/CheckBox" data-dojo-attach-point="logZoom"></div> <label for="zoomChk">${nls.logZoom}</label></div>
+    </div>
+    <div id="layer-events">
+        <div><strong>${nls.trackedLayers}</strong></div>
+        <div id="layer-ids">
+		</div>
     </div>
 </div>
